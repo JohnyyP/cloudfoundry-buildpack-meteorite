@@ -134,6 +134,9 @@ VENDORED_METEOR="$(mktmpdir meteor)"
 curl https://install.meteor.com | HOME="$VENDORED_METEOR" /bin/sh | indent
 echo "Meteor installed" | indent
 
+echo "Update browserlist"
+npx browserslist@latest --update-db
+
 echo "Installing packages" | indent
 HOME="$BUILD_DIR" mrt install | indent
 echo "Building meteor bundle" | indent
@@ -160,6 +163,7 @@ cat | tee "$BUILD_DIR"/.profile.d/mongo.sh <<EOF
   export MONGO_URL=\${MONGO_URL:-\${MONGOHQ_URL:-`ruby -e "require 'json'; puts JSON.parse(ENV['VCAP_SERVICES']).find { |key,value| value[0]['tags'].include? 'mongodb' }[1][0]['credentials']['uri']"`}}
   export
 EOF
+
 
 # vendor node into the slug
 PATH="$METEOR_BUILD_DIR/bin:$PATH"
